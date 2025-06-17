@@ -8,6 +8,7 @@ import { Sidebar } from "./components/Sidebar";
 import { Loader } from "./components/Loader";
 import { PageNotFound } from "./pages/PageNotFound";
 import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
+import { TrialBalancePage } from "./pages/TrialBalancePage";
 
 function App() {
   const [progress, setProgress] = React.useState(0); // progress bar
@@ -46,9 +47,9 @@ function App() {
           <Route
             path="/charts-of-accountant"
             element={<ChartsOfAccountPage />}
-          />
-          <Route path="/journal-voucher" element={<JournalVoucherPage />} />
+          />          <Route path="/journal-voucher" element={<JournalVoucherPage />} />
           <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
+          <Route path="/reports/trial-balance" element={<TrialBalancePage />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>

@@ -1,6 +1,7 @@
 import type { AccountTableData, AccountTreeNode } from "../types/account";
 import type { JournalVoucher } from "@/types/journalVoucher";
 import type { PaymentVoucher } from "@/types/paymentVoucher";
+import type { TrialBalanceData } from "@/types/trialBalance";
 
 export const mockTableData: AccountTableData[] = [
   {
@@ -337,3 +338,96 @@ export const mockPaymentVouchers: PaymentVoucher[] = [
     fiscalYear: "2081/2082",
   },
 ];
+
+export const mockTrialBalanceData: TrialBalanceData = {
+  fromDate: "01/06/2025",
+  toDate: "01/06/2025",
+  items: [
+    {
+      id: "1",
+      name: "Assets",
+      debit: 1054123,
+      credit: 0,
+      isExpandable: true,
+      isExpanded: false,
+      level: 0,
+      children: [
+        {
+          id: "1.1",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          level: 1,
+        },
+        {
+          id: "1.2",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          isExpandable: true,
+          isExpanded: false,
+          level: 1,
+          children: [
+            {
+              id: "1.2.1",
+              name: "Phoenix Baker",
+              debit: 10100,
+              credit: 10100,
+              level: 2,
+            },
+          ],
+        },
+        {
+          id: "1.3",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          level: 1,
+        },
+        {
+          id: "1.4",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          isExpandable: true,
+          isExpanded: false,
+          level: 1,
+          children: [
+            {
+              id: "1.4.1",
+              name: "Phoenix Baker",
+              debit: 10100,
+              credit: 10100,
+              level: 2,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "2",
+      name: "Assets",
+      debit: "-",
+      credit: 1054123,
+      isExpandable: true,
+      isExpanded: false,
+      level: 0,
+      children: [
+        {
+          id: "2.1",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          level: 1,
+        },
+        {
+          id: "2.2",
+          name: "Phoenix Baker",
+          debit: 10100,
+          credit: 10100,
+          level: 1,
+        },
+      ],
+    },
+  ],
+};

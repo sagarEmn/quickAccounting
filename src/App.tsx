@@ -42,12 +42,15 @@ function App() {
       <Sidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 p-6">        <Routes>
+      <main className="flex-1 p-6">
+        {" "}
+        <Routes>
           <Route path="/" element={<ChartsOfAccountPage />} />
           <Route
             path="/charts-of-accountant"
             element={<ChartsOfAccountPage />}
-          />          <Route path="/journal-voucher" element={<JournalVoucherPage />} />
+          />{" "}
+          <Route path="/journal-voucher" element={<JournalVoucherPage />} />
           <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
           <Route path="/reports/trial-balance" element={<TrialBalancePage />} />
           <Route path="*" element={<PageNotFound />} />

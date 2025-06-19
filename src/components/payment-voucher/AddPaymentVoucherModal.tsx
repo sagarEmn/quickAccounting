@@ -9,7 +9,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "lucide-react";
 
@@ -40,7 +46,9 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
     remarks: "",
   });
 
-  const handleVoucherDetailChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleVoucherDetailChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { id, value } = e.target;
     setVoucherDetails((prev) => ({ ...prev, [id]: value }));
   };
@@ -49,16 +57,26 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
     setVoucherDetails((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleTransactionChange = (index: number, field: 'account' | 'amount', value: string) => {
+  const handleTransactionChange = (
+    index: number,
+    field: "account" | "amount",
+    value: string
+  ) => {
     const updatedTransactions = [...voucherDetails.transactions];
-    updatedTransactions[index] = { ...updatedTransactions[index], [field]: value };
-    setVoucherDetails((prev) => ({ ...prev, transactions: updatedTransactions }));
+    updatedTransactions[index] = {
+      ...updatedTransactions[index],
+      [field]: value,
+    };
+    setVoucherDetails((prev) => ({
+      ...prev,
+      transactions: updatedTransactions,
+    }));
   };
 
   const addTransaction = () => {
     setVoucherDetails((prev) => ({
       ...prev,
-      transactions: [...prev.transactions, { account: "", amount: "" }]
+      transactions: [...prev.transactions, { account: "", amount: "" }],
     }));
   };
 
@@ -71,15 +89,15 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
 
     // Handle form submission
     console.log("Payment Voucher Details:", voucherDetails);
-    
+
     // Call success callback if provided
     if (onSuccess) {
       onSuccess("PV-0124");
     }
-    
+
     // Close modal
     onOpenChange(false);
-    
+
     // Reset form
     setVoucherDetails({
       voucherType: "Payment",
@@ -96,19 +114,37 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
       ],
       remarks: "",
     });
-  };  return (
+  };
+  return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full lg:max-w-2xl flex flex-col overflow-hidden">
+      <SheetContent
+        side="right"
+        className="w-full lg:max-w-2xl flex flex-col overflow-hidden"
+      >
         <SheetHeader className="px-8 pt-8 pb-6 border-b border-gray-100">
-          <SheetTitle className="text-xl font-bold text-gray-900">Create a new voucher</SheetTitle>
-          <p className="text-sm text-gray-500 mt-1">Select voucher type and enter transaction details</p>
+          <SheetTitle className="text-xl font-bold text-gray-900">
+            Create a new voucher
+          </SheetTitle>
+          <p className="text-sm text-gray-500 mt-1">
+            Select voucher type and enter transaction details
+          </p>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
           {/* Voucher Type */}
           <div className="space-y-2">
-            <Label htmlFor="voucherType" className="text-sm font-medium text-gray-700">Voucher Type*</Label>
-            <Select value={voucherDetails.voucherType} onValueChange={(value) => handleSelectChange("voucherType", value)}>
+            <Label
+              htmlFor="voucherType"
+              className="text-sm font-medium text-gray-700"
+            >
+              Voucher Type*
+            </Label>
+            <Select
+              value={voucherDetails.voucherType}
+              onValueChange={(value) =>
+                handleSelectChange("voucherType", value)
+              }
+            >
               <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select voucher type" />
               </SelectTrigger>
@@ -117,13 +153,20 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
                 <SelectItem value="Receipt">Receipt</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-gray-500">Choose Payment (money out) or Receipt (money in)</p>
+            <p className="text-xs text-gray-500">
+              Choose Payment (money out) or Receipt (money in)
+            </p>
           </div>
 
           {/* Party Name and Voucher Date */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="partyName" className="text-sm font-medium text-gray-700">Party Name*</Label>
+              <Label
+                htmlFor="partyName"
+                className="text-sm font-medium text-gray-700"
+              >
+                Party Name*
+              </Label>
               <Input
                 id="partyName"
                 placeholder="Eg. Sarswati Enterprise"
@@ -133,7 +176,12 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="voucherDate" className="text-sm font-medium text-gray-700">Voucher Date*</Label>
+              <Label
+                htmlFor="voucherDate"
+                className="text-sm font-medium text-gray-700"
+              >
+                Voucher Date*
+              </Label>
               <div className="relative">
                 <Input
                   id="voucherDate"
@@ -149,7 +197,12 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
           {/* Voucher Name and Account */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="voucherName" className="text-sm font-medium text-gray-700">Voucher Name*</Label>
+              <Label
+                htmlFor="voucherName"
+                className="text-sm font-medium text-gray-700"
+              >
+                Voucher Name*
+              </Label>
               <Input
                 id="voucherName"
                 value={voucherDetails.voucherName}
@@ -158,15 +211,27 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="account" className="text-sm font-medium text-gray-700">Account (COA)</Label>
-              <Select value={voucherDetails.account} onValueChange={(value) => handleSelectChange("account", value)}>
+              <Label
+                htmlFor="account"
+                className="text-sm font-medium text-gray-700"
+              >
+                Account (COA)
+              </Label>
+              <Select
+                value={voucherDetails.account}
+                onValueChange={(value) => handleSelectChange("account", value)}
+              >
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Select account" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Misc. Income">Misc. Income</SelectItem>
-                  <SelectItem value="Accounts Receivable">Accounts Receivable</SelectItem>
-                  <SelectItem value="Accounts Payable">Accounts Payable</SelectItem>
+                  <SelectItem value="Accounts Receivable">
+                    Accounts Receivable
+                  </SelectItem>
+                  <SelectItem value="Accounts Payable">
+                    Accounts Payable
+                  </SelectItem>
                   <SelectItem value="Cash">Cash</SelectItem>
                   <SelectItem value="Bank">Bank</SelectItem>
                 </SelectContent>
@@ -177,7 +242,12 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
           {/* Bill Date and Bill No */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="billDate" className="text-sm font-medium text-gray-700">Bill Date*</Label>
+              <Label
+                htmlFor="billDate"
+                className="text-sm font-medium text-gray-700"
+              >
+                Bill Date*
+              </Label>
               <div className="relative">
                 <Input
                   id="billDate"
@@ -189,7 +259,12 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="billNo" className="text-sm font-medium text-gray-700">Bill No.*</Label>
+              <Label
+                htmlFor="billNo"
+                className="text-sm font-medium text-gray-700"
+              >
+                Bill No.*
+              </Label>
               <Input
                 id="billNo"
                 placeholder="eg. INV-1012"
@@ -202,13 +277,20 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
 
           {/* Transactions */}
           <div className="space-y-4">
-            <Label className="text-sm font-medium text-gray-700">Transactions</Label>
+            <Label className="text-sm font-medium text-gray-700">
+              Transactions
+            </Label>
             <div className="space-y-3">
               {voucherDetails.transactions.map((transaction, index) => (
-                <div key={index} className="grid grid-cols-3 gap-3 items-center">
-                  <Select 
-                    value={transaction.account} 
-                    onValueChange={(value) => handleTransactionChange(index, "account", value)}
+                <div
+                  key={index}
+                  className="grid grid-cols-3 gap-3 items-center"
+                >
+                  <Select
+                    value={transaction.account}
+                    onValueChange={(value) =>
+                      handleTransactionChange(index, "account", value)
+                    }
                   >
                     <SelectTrigger className="h-10">
                       <SelectValue placeholder="Select account" />
@@ -216,15 +298,23 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
                     <SelectContent>
                       <SelectItem value="Bank">Bank</SelectItem>
                       <SelectItem value="Cash">Cash</SelectItem>
-                      <SelectItem value="Accounts Receivable">Accounts Receivable</SelectItem>
-                      <SelectItem value="Accounts Payable">Accounts Payable</SelectItem>
+                      <SelectItem value="Accounts Receivable">
+                        Accounts Receivable
+                      </SelectItem>
+                      <SelectItem value="Accounts Payable">
+                        Accounts Payable
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-600 font-medium">Rs.</span>
+                    <span className="text-sm text-gray-600 font-medium">
+                      Rs.
+                    </span>
                     <Input
                       value={transaction.amount}
-                      onChange={(e) => handleTransactionChange(index, "amount", e.target.value)}
+                      onChange={(e) =>
+                        handleTransactionChange(index, "amount", e.target.value)
+                      }
                       placeholder="Amount"
                       className="h-10"
                     />
@@ -246,7 +336,12 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
 
           {/* Remarks */}
           <div className="space-y-2">
-            <Label htmlFor="remarks" className="text-sm font-medium text-gray-700">Remarks</Label>
+            <Label
+              htmlFor="remarks"
+              className="text-sm font-medium text-gray-700"
+            >
+              Remarks
+            </Label>
             <Textarea
               id="remarks"
               placeholder="Enter a description..."
@@ -260,14 +355,14 @@ export const AddPaymentVoucherModal: React.FC<AddPaymentVoucherModalProps> = ({
 
         <SheetFooter className="px-8 pb-8 pt-6 border-t border-gray-100 flex-shrink-0">
           <div className="flex space-x-4 w-full">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => onOpenChange(false)}
               className="flex-1 h-11"
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleSubmit}
               className="flex-1 h-11 bg-blue-600 hover:bg-blue-700"
             >

@@ -1,4 +1,5 @@
-import { Loader2 } from "lucide-react";
+// import { LoaderCircle } from "lucide-react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface LoaderProps {
   value?: number;
@@ -7,7 +8,7 @@ interface LoaderProps {
 function Loader({}: LoaderProps) {
   return (
     <div className="flex flex-col items-center">
-      <Loader2 className="h-24 w-24 animate-pulse text-blue-600" />
+      <CircularProgress size={80} />
       <p className="text-center mt-2"> Loading data...</p>
     </div>
   );

@@ -12,8 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
-import { Plus, FileText, Calendar, Search } from "lucide-react";
+import { Plus, FileText, Calendar, Check, ChevronsUpDown } from "lucide-react";
 import { mockTableData } from "@/data/mockData"; 
 import type { JournalVoucherEntryRow } from "@/types/journalVoucher";
 
@@ -37,14 +39,12 @@ export const AddJournalVoucherModal: React.FC<AddJournalVoucherModalProps> = ({
     billNo: "",
     paymentMethod: "Cash",
     remarks: "",
-  });
-  const [entryRows, setEntryRows] = useState<JournalVoucherEntryRow[]>([
+  });  const [entryRows, setEntryRows] = useState<JournalVoucherEntryRow[]>([
     { chartOfAccount: "C0001 Accounts", debit: 100, credit: 0, balance: 100, description: "" },
     { chartOfAccount: "C0032 Fees", debit: 0, credit: 100, balance: -100, description: "" },
     { chartOfAccount: "", debit: 0, credit: 0, balance: 0, description: "" },
   ]);
-
-  const [searchQueries, setSearchQueries] = useState<{[key: number]: string}>({});
+  const [openComboboxes, setOpenComboboxes] = useState<{[key: number]: boolean}>({});
 
   // Create combined account list for searching
   const allAccounts = [
@@ -52,21 +52,6 @@ export const AddJournalVoucherModal: React.FC<AddJournalVoucherModalProps> = ({
     { id: "preset2", accountCode: "C0032", name: "Fees" },
     ...mockTableData
   ];
-
-  // Filter accounts based on search query for a specific row
-  const getFilteredAccounts = (rowIndex: number) => {
-    const query = searchQueries[rowIndex] || "";
-    if (!query.trim()) return allAccounts;
-    
-    return allAccounts.filter(account => 
-      account.accountCode.toLowerCase().includes(query.toLowerCase()) ||
-      account.name.toLowerCase().includes(query.toLowerCase())
-    );
-  };
-
-  const handleSearchChange = (rowIndex: number, query: string) => {
-    setSearchQueries(prev => ({ ...prev, [rowIndex]: query }));
-  };
 
   const handleVoucherDetailChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -235,36 +220,51 @@ export const AddJournalVoucherModal: React.FC<AddJournalVoucherModalProps> = ({
                 <TableBody>
                   {entryRows.map((row, index) => (
                     <TableRow key={index} className="border-b border-gray-100">                      <TableCell className="py-4 px-4">
-                        <div className="space-y-2">
-                          <Select onValueChange={(value) => handleEntryRowChange(index, "chartOfAccount", value)} value={row.chartOfAccount}>
-                            <SelectTrigger className="w-full min-w-[200px] h-9">
-                              <SelectValue placeholder="Select account" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <div className="p-2 border-b border-gray-100">
-                                <div className="relative">
-                                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                  <Input
-                                    placeholder="Search accounts..."
-                                    value={searchQueries[index] || ""}
-                                    onChange={(e) => handleSearchChange(index, e.target.value)}
-                                    className="pl-8 h-8 text-sm"
-                                  />
-                                </div>
-                              </div>
-                              {getFilteredAccounts(index).map((account) => (
-                                <SelectItem key={account.id} value={`${account.accountCode} ${account.name}`}>
-                                  {account.accountCode} {account.name}
-                                </SelectItem>
-                              ))}
-                              {getFilteredAccounts(index).length === 0 && (
-                                <div className="p-2 text-sm text-gray-500 text-center">
-                                  No accounts found
-                                </div>
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                        <Popover 
+                          open={openComboboxes[index]} 
+                          onOpenChange={(open) => setOpenComboboxes(prev => ({ ...prev, [index]: open }))}
+                        >
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={openComboboxes[index]}
+                              className="w-full min-w-[200px] h-9 justify-between"
+                            >
+                              {row.chartOfAccount || "Select account..."}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[280px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Search accounts..." />
+                              <CommandList>
+                                <CommandEmpty>No account found.</CommandEmpty>
+                                <CommandGroup>
+                                  {allAccounts.map((account) => (
+                                    <CommandItem
+                                      key={account.id}
+                                      value={`${account.accountCode} ${account.name}`}
+                                      onSelect={(currentValue) => {
+                                        handleEntryRowChange(index, "chartOfAccount", currentValue);
+                                        setOpenComboboxes(prev => ({ ...prev, [index]: false }));
+                                      }}
+                                    >
+                                      <Check
+                                        className={`mr-2 h-4 w-4 ${
+                                          row.chartOfAccount === `${account.accountCode} ${account.name}` 
+                                            ? "opacity-100" 
+                                            : "opacity-0"
+                                        }`}
+                                      />
+                                      {account.accountCode} {account.name}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                       </TableCell>
                       <TableCell className="py-4 px-4">
                         <div className="flex items-center space-x-2">

@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import { Plus, FileText, Calendar } from "lucide-react";
+import { Plus, FileText, Calendar, Search } from "lucide-react";
 import { mockTableData } from "@/data/mockData"; 
 import type { JournalVoucherEntryRow } from "@/types/journalVoucher";
 
@@ -38,12 +38,35 @@ export const AddJournalVoucherModal: React.FC<AddJournalVoucherModalProps> = ({
     paymentMethod: "Cash",
     remarks: "",
   });
-
   const [entryRows, setEntryRows] = useState<JournalVoucherEntryRow[]>([
     { chartOfAccount: "C0001 Accounts", debit: 100, credit: 0, balance: 100, description: "" },
     { chartOfAccount: "C0032 Fees", debit: 0, credit: 100, balance: -100, description: "" },
     { chartOfAccount: "", debit: 0, credit: 0, balance: 0, description: "" },
   ]);
+
+  const [searchQueries, setSearchQueries] = useState<{[key: number]: string}>({});
+
+  // Create combined account list for searching
+  const allAccounts = [
+    { id: "preset1", accountCode: "C0001", name: "Accounts" },
+    { id: "preset2", accountCode: "C0032", name: "Fees" },
+    ...mockTableData
+  ];
+
+  // Filter accounts based on search query for a specific row
+  const getFilteredAccounts = (rowIndex: number) => {
+    const query = searchQueries[rowIndex] || "";
+    if (!query.trim()) return allAccounts;
+    
+    return allAccounts.filter(account => 
+      account.accountCode.toLowerCase().includes(query.toLowerCase()) ||
+      account.name.toLowerCase().includes(query.toLowerCase())
+    );
+  };
+
+  const handleSearchChange = (rowIndex: number, query: string) => {
+    setSearchQueries(prev => ({ ...prev, [rowIndex]: query }));
+  };
 
   const handleVoucherDetailChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -211,22 +234,37 @@ export const AddJournalVoucherModal: React.FC<AddJournalVoucherModalProps> = ({
                 </TableHeader>
                 <TableBody>
                   {entryRows.map((row, index) => (
-                    <TableRow key={index} className="border-b border-gray-100">
-                      <TableCell className="py-4 px-4">
-                        <Select onValueChange={(value) => handleEntryRowChange(index, "chartOfAccount", value)} value={row.chartOfAccount}>
-                          <SelectTrigger className="w-full min-w-[200px] h-9">
-                            <SelectValue placeholder="Select account" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="C0001 Accounts">C0001 Accounts</SelectItem>
-                            <SelectItem value="C0032 Fees">C0032 Fees</SelectItem>
-                            {mockTableData.map((account) => (
-                              <SelectItem key={account.id} value={account.accountCode}>
-                                {account.accountCode} {account.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <TableRow key={index} className="border-b border-gray-100">                      <TableCell className="py-4 px-4">
+                        <div className="space-y-2">
+                          <Select onValueChange={(value) => handleEntryRowChange(index, "chartOfAccount", value)} value={row.chartOfAccount}>
+                            <SelectTrigger className="w-full min-w-[200px] h-9">
+                              <SelectValue placeholder="Select account" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <div className="p-2 border-b border-gray-100">
+                                <div className="relative">
+                                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                  <Input
+                                    placeholder="Search accounts..."
+                                    value={searchQueries[index] || ""}
+                                    onChange={(e) => handleSearchChange(index, e.target.value)}
+                                    className="pl-8 h-8 text-sm"
+                                  />
+                                </div>
+                              </div>
+                              {getFilteredAccounts(index).map((account) => (
+                                <SelectItem key={account.id} value={`${account.accountCode} ${account.name}`}>
+                                  {account.accountCode} {account.name}
+                                </SelectItem>
+                              ))}
+                              {getFilteredAccounts(index).length === 0 && (
+                                <div className="p-2 text-sm text-gray-500 text-center">
+                                  No accounts found
+                                </div>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </TableCell>
                       <TableCell className="py-4 px-4">
                         <div className="flex items-center space-x-2">

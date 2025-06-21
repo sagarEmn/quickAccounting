@@ -1,15 +1,27 @@
 // src/pages/TrialBalancePage.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TrialBalanceTable } from "@/components/reports/TrialBalanceTable";
 import { TrialBalanceFilter } from "@/components/reports/TrialBalanceFilter";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export const TrialBalancePage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("Today 01-06-2025");
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { setLoading } = useLoading();
+    useEffect(() => {
+    // Simulate data loading only once when the component mounts
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDateChange = (date: string) => {
     setSelectedDate(date);

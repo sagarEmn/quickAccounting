@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import PageNotFoundIcon from "../assets/PageNotFoundIcon";
 import { Button } from "../components/ui/button";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export const PageNotFound: React.FC = () => {
   const navigate = useNavigate();
+  const { setLoading } = useLoading();
+  useEffect(() => {
+    // Stop loading immediately for this error page
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleGoBack = () => {
     navigate(-1);

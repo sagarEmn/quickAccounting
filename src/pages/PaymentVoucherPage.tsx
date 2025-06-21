@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, SlidersHorizontal, Plus } from "lucide-react";
 
 // shadcn imports
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { useLoading } from "@/contexts/LoadingContext";
 
 // Payment Voucher Components imports
 import { PaymentVoucherTable } from "@/components/payment-voucher/PaymentVoucherTable";
@@ -16,6 +17,17 @@ export const PaymentVoucherPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [createdVoucherNo, setCreatedVoucherNo] = useState("");
+  const { setLoading } = useLoading();
+    useEffect(() => {
+    // Simulate data loading only once when the component mounts
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // State for filter
   const [isFilterOpen, setIsFilterOpen] = useState(false);

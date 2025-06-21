@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, SlidersHorizontal, Plus } from "lucide-react";
 
 // shadcn imports
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 // import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { useLoading } from "@/contexts/LoadingContext";
 
 // Journal Components imports
 import { JournalVoucherTable } from "@/components/journal-voucher/JournalVoucherTable";
@@ -17,9 +18,19 @@ export const JournalVoucherPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [createdVoucherNo, setCreatedVoucherNo] = useState("");
+  const { setLoading } = useLoading();
 
   // State for filter
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);  useEffect(() => {
+    // Simulate data loading only once when the component mounts
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleVoucherSuccess = (voucherNo: string) => {
     setCreatedVoucherNo(voucherNo);

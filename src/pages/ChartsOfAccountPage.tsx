@@ -1,5 +1,5 @@
 // src/pages/ChartsOfAccountPage.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, SlidersHorizontal, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,22 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AddAccountModal } from "@/components/charts-of-account/AddAccountModal";
 import { AccountTable } from "@/components/charts-of-account/AccountTable";
 import { AccountTree } from "@/components/charts-of-account/AccountTree";
+import { useLoading } from "@/contexts/LoadingContext";
 
 export const ChartsOfAccountPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"table" | "tree">("table");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setLoading } = useLoading();
+  useEffect(() => {
+    // Simulate data loading only once when the component mounts
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">

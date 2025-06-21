@@ -5,11 +5,11 @@ interface LoaderProps {
   value?: number;
 }
 
-function Loader({}: LoaderProps) {
+function Loader({ value }: LoaderProps) {
   return (
     <div className="flex flex-col items-center">
-      <CircularProgress size={80} />
-      <p className="text-center mt-2"> Loading data...</p>
+      <CircularProgress size={80} value={value} />
+      <p className="text-center mt-2">Loading data...</p>
     </div>
   );
 }

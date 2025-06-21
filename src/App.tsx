@@ -9,6 +9,8 @@ import { Loader } from "./components/Loader";
 import { PageNotFound } from "./pages/PageNotFound";
 import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
 import { TrialBalancePage } from "./pages/TrialBalancePage";
+import { LoadingProvider } from "./contexts/LoadingContext";
+import { ContentWrapper } from "./components/ContentWrapper";
 
 function App() {
   const [progress, setProgress] = React.useState(0); // progress bar
@@ -26,37 +28,37 @@ function App() {
       });
     }, 200);
     return () => clearInterval(interval);
-  }, []);
-
-  if (!isLoaded) {
+  }, []);  if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader value={progress} />
       </div>
     );
   }
-
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar />
+    <LoadingProvider>
+      <div className="flex min-h-screen bg-gray-100">
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Main Content Area */}
-      <main className="flex-1 p-6">
-        {" "}
-        <Routes>
-          <Route path="/" element={<ChartsOfAccountPage />} />
-          <Route
-            path="/charts-of-accountant"
-            element={<ChartsOfAccountPage />}
-          />{" "}
-          <Route path="/journal-voucher" element={<JournalVoucherPage />} />
-          <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
-          <Route path="/reports/trial-balance" element={<TrialBalancePage />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </main>
-    </div>
+        {/* Main Content Area */}
+        <ContentWrapper>
+          <main className="flex-1 p-6">
+            <Routes>
+              <Route path="/" element={<ChartsOfAccountPage />} />
+              <Route
+                path="/charts-of-accountant"
+                element={<ChartsOfAccountPage />}
+              />
+              <Route path="/journal-voucher" element={<JournalVoucherPage />} />
+              <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
+              <Route path="/reports/trial-balance" element={<TrialBalancePage />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </main>
+        </ContentWrapper>
+      </div>
+    </LoadingProvider>
   );
 }
 

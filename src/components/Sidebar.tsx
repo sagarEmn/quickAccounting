@@ -32,7 +32,7 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white border-r flex flex-col shadow-md h-screen transition-all duration-300`}>
       {/* Fixed Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+      <div className={`flex items-center ${isCollapsed ? 'flex-col space-y-2 py-4' : 'justify-between p-4'} border-b border-gray-200`}>
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="bg-gray-800 p-2 rounded-lg">
@@ -42,13 +42,13 @@ export const Sidebar: React.FC = () => {
           </div>
         )}
         {isCollapsed && (
-          <div className="bg-gray-800 p-2 rounded-lg mx-auto">
+          <div className="bg-gray-800 p-2 rounded-lg">
             <span className="text-white text-lg font-bold">LB</span>
           </div>
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 hover:bg-gray-100 rounded"
+          className="p-1 hover:bg-gray-100 rounded flex-shrink-0"
         >
           {isCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -59,37 +59,47 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Scrollable Navigation */}
-      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+      <nav className={`flex-1 overflow-y-auto ${isCollapsed ? 'p-2' : 'p-4'} space-y-2`}>
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:bg-gray-50"
+          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
+          title={isCollapsed ? "Dashboard" : ""}
         >
-          <LayoutDashboard className="mr-2 h-5 w-5" /> Dashboard
+          <LayoutDashboard className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && " Dashboard"}
         </Button>
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:bg-gray-50"
+          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
+          title={isCollapsed ? "Teacher Module" : ""}
         >
-          <Users className="mr-2 h-5 w-5" /> Teacher Module
+          <Users className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && " Teacher Module"}
         </Button>
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:bg-gray-50"
+          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
+          title={isCollapsed ? "Student Module" : ""}
         >
-          <Book className="mr-2 h-5 w-5" /> Student Module
+          <Book className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && " Student Module"}
         </Button>
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:bg-gray-50"        >
-          <CheckCheck className="mr-2 h-5 w-5" /> Attendance
-        </Button>
-        
-        <Accordion type="single" collapsible defaultValue="accounting">
-          <AccordionItem value="accounting" className="border-b-0">
-            <AccordionTrigger className="w-full justify-start text-gray-700 hover:bg-gray-50 data-[state=open]:text-blue-600">
-              <Wallet className="mr-2 h-5 w-5" /> Accounting
-            </AccordionTrigger>
-            <AccordionContent className="pl-8 pt-1 pb-0">
+          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
+          title={isCollapsed ? "Attendance" : ""}
+        >
+          <CheckCheck className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && " Attendance"}
+        </Button>        
+        {!isCollapsed ? (
+          <>
+            <Accordion type="single" collapsible defaultValue="accounting">
+              <AccordionItem value="accounting" className="border-b-0">
+                <AccordionTrigger className="w-full justify-start text-gray-700 hover:bg-gray-50 data-[state=open]:text-blue-600">
+                  <Wallet className="mr-2 h-5 w-5" /> Accounting
+                </AccordionTrigger>
+                <AccordionContent className="pl-8 pt-1 pb-0">
               <Link to="/charts-of-accountant">
                 <Button
                   variant="ghost"
@@ -204,27 +214,97 @@ export const Sidebar: React.FC = () => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+          </>
+        ) : (
+          <div className="space-y-2">
+            <Button
+              variant="ghost"
+              className="w-full justify-center text-gray-700 hover:bg-gray-50"
+              title="Dashboard"
+            >
+              <LayoutDashboard className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-center text-gray-700 hover:bg-gray-50"
+              title="Teacher Module"
+            >
+              <Users className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-center text-gray-700 hover:bg-gray-50"
+              title="Student Module"
+            >
+              <Book className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-center text-gray-700 hover:bg-gray-50"
+              title="Attendance"
+            >
+              <CheckCheck className="h-5 w-5" />
+            </Button>
+            <Link to="/charts-of-accountant">
+              <Button
+                variant="ghost"
+                className={`w-full justify-center ${
+                  currentPath === "/charts-of-accountant"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+                title="Charts of Account"
+              >
+                <Wallet className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/reports/trial-balance">
+              <Button
+                variant="ghost"
+                className={`w-full justify-center ${
+                  currentPath.startsWith("/reports")
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+                title="Reports"
+              >
+                <Book className="h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
+        )}
       </nav>
 
       {/* Fixed Footer */}
-      <div className="p-4 space-y-2 border-t border-gray-200 bg-white">
+      <div className={`${isCollapsed ? 'p-2' : 'p-4'} space-y-2 border-t border-gray-200 bg-white`}>
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:bg-gray-50"
+          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
+          title={isCollapsed ? "Settings" : ""}
         >
-          <Settings className="mr-2 h-5 w-5" /> Settings
+          <Settings className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && " Settings"}
         </Button>
-        <div className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer">
-          <div className="flex items-center space-x-2">
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-2 rounded-md hover:bg-gray-50 cursor-pointer`}>
+          {!isCollapsed && (
+            <>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
+                  OR
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Olivia Rhye</p>
+                  <p className="text-xs text-gray-500">olivia@untitledui.com</p>
+                </div>
+              </div>
+              <LogOut className="h-4 w-4 text-gray-500" />
+            </>
+          )}
+          {isCollapsed && (
             <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
               OR
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-800">Olivia Rhye</p>
-              <p className="text-xs text-gray-500">olivia@untitledui.com</p>
-            </div>
-          </div>
-          <LogOut className="h-4 w-4 text-gray-500" />
+          )}
         </div>
       </div>
     </aside>

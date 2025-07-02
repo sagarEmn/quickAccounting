@@ -76,7 +76,7 @@ export const TrialBalanceTable: React.FC = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="border rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow className="bg-white">

@@ -82,7 +82,7 @@ export const LedgerTable: React.FC = () => {
   };
 
   return (
-    <div className="border rounded-lg">
+    <div className="border rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>

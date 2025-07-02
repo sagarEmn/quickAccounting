@@ -10,7 +10,8 @@ export const ContentWrapper: React.FC<ContentWrapperProps> = ({ children }) => {
   const { isLoading } = useLoading();
 
   return (
-    <div className="relative flex-1">      {isLoading ? (
+    <div className="relative flex-1 min-w-0 overflow-hidden">
+      {isLoading ? (
         <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
           <Loader />
         </div>

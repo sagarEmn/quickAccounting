@@ -39,13 +39,13 @@ function App() {
   }
   return (
     <LoadingProvider>
-      <div className="flex min-h-screen bg-gray-100">
+      <div className="flex h-screen bg-gray-100 overflow-hidden">
         {/* Sidebar */}
         <Sidebar />
 
         {/* Main Content Area */}
         <ContentWrapper>
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 overflow-y-auto h-full">
             <Routes>
               <Route path="/" element={<ChartsOfAccountPage />} />
               <Route

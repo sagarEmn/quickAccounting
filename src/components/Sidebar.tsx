@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router";
 
 import {
@@ -9,6 +9,8 @@ import {
   CheckCheck,
   Settings,
   LogOut,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,16 +23,43 @@ import {
 export const Sidebar: React.FC = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  return (    <aside className="w-64 bg-white border-r p-4 flex flex-col shadow-md">
-      <div className="flex items-center space-x-2 mb-8">
-        <div className="bg-gray-800 p-2 rounded-lg">
-          <span className="text-white text-lg font-bold">LB</span>
-        </div>
-        <span className="text-xl font-semibold text-gray-800">Lightbox</span>
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <aside className={`${isCollapsed ? 'w-16' : 'w-64'} bg-white border-r flex flex-col shadow-md h-screen transition-all duration-300`}>
+      {/* Fixed Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        {!isCollapsed && (
+          <div className="flex items-center space-x-2">
+            <div className="bg-gray-800 p-2 rounded-lg">
+              <span className="text-white text-lg font-bold">LB</span>
+            </div>
+            <span className="text-xl font-semibold text-gray-800">Lightbox</span>
+          </div>
+        )}
+        {isCollapsed && (
+          <div className="bg-gray-800 p-2 rounded-lg mx-auto">
+            <span className="text-white text-lg font-bold">LB</span>
+          </div>
+        )}
+        <button
+          onClick={toggleSidebar}
+          className="p-1 hover:bg-gray-100 rounded"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </button>
       </div>
 
-      <nav className="flex-1 space-y-2">
+      {/* Scrollable Navigation */}
+      <nav className="flex-1 overflow-y-auto p-4 space-y-2">
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-700 hover:bg-gray-50"
@@ -174,9 +203,11 @@ export const Sidebar: React.FC = () => {
               </Link>
             </AccordionContent>
           </AccordionItem>
-        </Accordion>      </nav>
+        </Accordion>
+      </nav>
 
-      <div className="mt-auto space-y-2 pt-4 border-t border-gray-200">
+      {/* Fixed Footer */}
+      <div className="p-4 space-y-2 border-t border-gray-200 bg-white">
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-700 hover:bg-gray-50"

@@ -41,7 +41,8 @@ export const TrialBalanceTable: React.FC = () => {
   // Recursive function to render trial balance items
   const renderTrialBalanceItems = (items: TrialBalanceItem[]) => {
     return items.map(item => (
-      <React.Fragment key={item.id}>        <TableRow className={item.level > 0 ? "bg-gray-50" : ""}>
+      <React.Fragment key={item.id}>
+        <TableRow className={item.level > 0 ? "bg-gray-50" : ""}>
           <TableCell className="flex items-center">
             {item.isExpandable ? (
               <button 

@@ -10,6 +10,7 @@ import { PageNotFound } from "./pages/PageNotFound";
 import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
 import { TrialBalancePage } from "./pages/TrialBalancePage";
 import { LedgerPage } from "./pages/LedgerPage";
+import { BalanceSheetPage } from "./pages/BalanceSheetPage";
 import { LoadingProvider } from "./contexts/LoadingContext";
 import { ContentWrapper } from "./components/ContentWrapper";
 
@@ -55,6 +56,7 @@ function App() {
               <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
               <Route path="/reports/ledger" element={<LedgerPage />} />
               <Route path="/reports/trial-balance" element={<TrialBalancePage />} />
+              <Route path="/reports/balance-sheet" element={<BalanceSheetPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </main>

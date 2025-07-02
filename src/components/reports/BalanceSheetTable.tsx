@@ -11,7 +11,7 @@ import {
 import { mockTrialBalanceData } from "@/data/mockData";
 import type { TrialBalanceItem } from "@/types/trialBalance";
 
-export const TrialBalanceTable: React.FC = () => {
+export const BalanceSheetTable: React.FC = () => {
   // First level assets as expanded by default
   const initialExpandedItems: Record<string, boolean> = {};
   mockTrialBalanceData.items.forEach(item => {
@@ -38,8 +38,8 @@ export const TrialBalanceTable: React.FC = () => {
     }));
   };
 
-  // Recursive function to render trial balance items
-  const renderTrialBalanceItems = (items: TrialBalanceItem[]) => {
+  // Recursive function to render balance sheet items with proper hierarchy indentation
+  const renderBalanceSheetItems = (items: TrialBalanceItem[]) => {
     return items.map(item => (
       <React.Fragment key={item.id}>
         <TableRow className={item.level > 0 ? "bg-gray-50" : ""}>
@@ -49,10 +49,11 @@ export const TrialBalanceTable: React.FC = () => {
                 onClick={() => toggleItemExpansion(item.id)}
                 className="p-1 mr-2 hover:bg-gray-200 rounded"
               >
-                {expandedItems[item.id] ? 
-                  <ChevronDown className="h-4 w-4" /> : 
+                {expandedItems[item.id] ? (
+                  <ChevronDown className="h-4 w-4" />
+                ) : (
                   <ChevronRight className="h-4 w-4" />
-                }
+                )}
               </button>
             ) : (
               <div className="w-6 mr-2" />
@@ -64,29 +65,30 @@ export const TrialBalanceTable: React.FC = () => {
               {item.name}
             </span>
           </TableCell>
-          <TableCell className="text-right">{formatCurrency(item.debit)}</TableCell>
-          <TableCell className="text-right">{formatCurrency(item.credit)}</TableCell>
+          <TableCell className="text-right font-medium">
+            {formatCurrency(item.debit)}
+          </TableCell>
         </TableRow>
         
-        {item.children && expandedItems[item.id] && 
-          renderTrialBalanceItems(item.children)
+        {/* Render children if expanded */}
+        {item.isExpandable && expandedItems[item.id] && item.children && 
+          renderBalanceSheetItems(item.children)
         }
       </React.Fragment>
     ));
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="border rounded-lg">
       <Table>
         <TableHeader>
-          <TableRow className="bg-white">
-            <TableHead className="w-1/2">Customer</TableHead>
-            <TableHead className="w-1/4 text-right">Debit(Closing)</TableHead>
-            <TableHead className="w-1/4 text-right">Credit(Closing)</TableHead>
+          <TableRow>
+            <TableHead className="w-3/4">Accounts</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {renderTrialBalanceItems(mockTrialBalanceData.items)}
+          {renderBalanceSheetItems(mockTrialBalanceData.items)}
         </TableBody>
       </Table>
     </div>

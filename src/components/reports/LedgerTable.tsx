@@ -47,7 +47,7 @@ export const LedgerTable: React.FC = () => {
             {item.isExpandable ? (
               <button 
                 onClick={() => toggleItemExpansion(item.id)}
-                className="p-1 mr-2"
+                className="p-1 mr-2 hover:bg-gray-200 rounded"
               >
                 {expandedItems[item.id] ? (
                   <ChevronDown className="h-4 w-4" />
@@ -59,8 +59,8 @@ export const LedgerTable: React.FC = () => {
               <div className="w-6 mr-2" />
             )}
             <span 
-              className={`${item.level === 0 ? 'font-semibold' : ''}`}
-              style={{ marginLeft: `${item.level * 20}px` }}
+              className={`${item.level === 0 ? 'font-semibold text-gray-800' : 'text-gray-700'}`}
+              style={{ marginLeft: `${item.level * 24}px` }}
             >
               {item.name}
             </span>

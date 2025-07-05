@@ -76,14 +76,20 @@ export const Sidebar: React.FC = () => {
           <Users className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
           {!isCollapsed && " Teacher Module"}
         </Button>
-        <Button
-          variant="ghost"
-          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
-          title={isCollapsed ? "Student Module" : ""}
-        >
-          <Book className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
-          {!isCollapsed && " Student Module"}
-        </Button>
+        <Link to="/student-module">
+          <Button
+            variant="ghost"
+            className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} ${
+              currentPath === "/student-module"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
+            title={isCollapsed ? "Student Module" : ""}
+          >
+            <Book className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+            {!isCollapsed && " Student Module"}
+          </Button>
+        </Link>
         <Button
           variant="ghost"
           className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
@@ -231,13 +237,19 @@ export const Sidebar: React.FC = () => {
             >
               <Users className="h-5 w-5" />
             </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-center text-gray-700 hover:bg-gray-50"
-              title="Student Module"
-            >
-              <Book className="h-5 w-5" />
-            </Button>
+            <Link to="/student-module">
+              <Button
+                variant="ghost"
+                className={`w-full justify-center ${
+                  currentPath === "/student-module"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+                title="Student Module"
+              >
+                <Book className="h-5 w-5" />
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               className="w-full justify-center text-gray-700 hover:bg-gray-50"

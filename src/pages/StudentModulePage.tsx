@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { Plus, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { Search, Filter, Plus, Trash2, Edit, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StudentFilterTable } from "@/components/student-module/StudentFilterTable";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AddStudentModal } from "@/components/student-module/AddStudentModal";
 import { DeleteStudentModal } from "@/components/student-module/DeleteStudentModal";
 import { StudentDetailModal } from "@/components/student-module/StudentDetailModal";
@@ -12,10 +13,6 @@ import type { Student } from "@/types/student";
 const StudentModulePage: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(mockStudentData);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedClass, setSelectedClass] = useState("all");
-  const [selectedSection, setSelectedSection] = useState("all");
-  const [selectedStudentType, setSelectedStudentType] = useState("all");
-  const [selectedGender, setSelectedGender] = useState("all");
   
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -23,23 +20,16 @@ const StudentModulePage: React.FC = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
-  const [viewingStudent, setViewingStudent] = useState<Student | null>(null);
 
-  // Filter students based on search and filter criteria
+  // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
     return students.filter((student) => {
       const matchesSearch = 
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         student.id.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesClass = selectedClass === "all" || student.class === selectedClass;
-      const matchesSection = selectedSection === "all" || student.section === selectedSection;
-      const matchesType = selectedStudentType === "all" || student.studentType === selectedStudentType;
-      const matchesGender = selectedGender === "all" || student.gender === selectedGender;
-
-      return matchesSearch && matchesClass && matchesSection && matchesType && matchesGender;
+      return matchesSearch;
     });
-  }, [students, searchTerm, selectedClass, selectedSection, selectedStudentType, selectedGender]);
+  }, [students, searchTerm]);
 
   // Calculate statistics
   const stats = useMemo(() => {
@@ -109,21 +99,10 @@ const StudentModulePage: React.FC = () => {
     }
   };
 
-  const handleViewDetails = (student: Student) => {
-    setViewingStudent(student);
-    setIsDetailModalOpen(true);
-  };
-
   const handleViewFeeHistory = (student: Student) => {
     // This would typically open a fee history modal or navigate to a fee details page
     console.log("View fee history for student:", student.name);
     alert(`Fee history for ${student.name} would be displayed here.`);
-  };
-
-  const handleExportData = () => {
-    // This would typically export the filtered data to CSV or Excel
-    console.log("Exporting student data...");
-    alert("Student data export functionality would be implemented here.");
   };
 
   const closeAddModal = () => {
@@ -131,24 +110,26 @@ const StudentModulePage: React.FC = () => {
     setEditingStudent(null);
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Student Module</h1>
-          <p className="text-gray-600">
-            Manage student enrollment, fees, and academic records
-          </p>
-        </div>
-        <Button onClick={() => setIsAddModalOpen(true)} className="w-fit">
-          <Plus className="mr-2 h-4 w-4" />
-          Add New Student
-        </Button>
-      </div>
+  const getSectionBadge = (section: string) => {
+    const colors: Record<string, string> = {
+      "A1": "bg-blue-100 text-blue-800",
+      "A2": "bg-green-100 text-green-800", 
+      "B1": "bg-purple-100 text-purple-800",
+      "B2": "bg-orange-100 text-orange-800",
+      "C1": "bg-pink-100 text-pink-800",
+      "D3": "bg-indigo-100 text-indigo-800",
+    };
+    return (
+      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${colors[section] || "bg-gray-100 text-gray-800"}`}>
+        {section}
+      </span>
+    );
+  };
 
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Students</CardTitle>
@@ -206,26 +187,155 @@ const StudentModulePage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Student Filter and Table Combined */}
-      <StudentFilterTable
-        students={filteredStudents}
-        onEdit={handleEditStudent}
-        onDelete={handleDeleteStudent}
-        onViewDetails={handleViewDetails}
-        onViewFeeHistory={handleViewFeeHistory}
-        onSearch={setSearchTerm}
-        onClassFilter={setSelectedClass}
-        onSectionFilter={setSelectedSection}
-        onStudentTypeFilter={setSelectedStudentType}
-        onGenderFilter={setSelectedGender}
-        onExportData={handleExportData}
-        searchTerm={searchTerm}
-        selectedClass={selectedClass}
-        selectedSection={selectedSection}
-        selectedStudentType={selectedStudentType}
-        selectedGender={selectedGender}
-        totalStudents={students.length}
-      />
+      {/* Header with Search and Filters */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        {/* Top Header */}
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-semibold text-gray-900">Student Module</h1>
+            <Button 
+              onClick={() => setIsAddModalOpen(true)} 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add Student
+            </Button>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center gap-4">
+            {/* Search */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search student"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 h-10 border-gray-300"
+              />
+            </div>
+
+            {/* Filters Button */}
+            <Button variant="outline" className="h-10 px-4 border-gray-300">
+              <Filter className="mr-2 h-4 w-4" />
+              Filters
+            </Button>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-b border-gray-200">
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name of student
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Gender
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Class
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Section
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Student Type
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  No. of months 2077/78
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Annual Received Income
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredStudents.map((student) => (
+                <TableRow key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {student.name}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {student.gender}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {student.class}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap">
+                    {getSectionBadge(student.section)}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {student.studentType}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {student.monthsEnrolled.toFixed(2)}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center text-sm text-gray-900">
+                      <span className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center mr-2">
+                        <span className="text-white text-xs">!</span>
+                      </span>
+                      {student.annualIncome.toLocaleString()}
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex items-center space-x-3">
+                      {student.hasFeeBreakdown && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-gray-600 hover:text-gray-900 p-1"
+                          onClick={() => handleViewFeeHistory(student)}
+                        >
+                          View Breakdown
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-gray-400 hover:text-gray-600 p-1"
+                        onClick={() => handleDeleteStudent(student)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-gray-400 hover:text-gray-600 p-1"
+                        onClick={() => handleEditStudent(student)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Pagination */}
+        <div className="px-6 py-4 border-t border-gray-200">
+          <div className="flex items-center justify-between">
+            <Button variant="outline" className="text-gray-600 border-gray-300">
+              Previous
+            </Button>
+            <span className="text-sm text-gray-700">
+              Page 1 of 10
+            </span>
+            <Button variant="outline" className="text-gray-600 border-gray-300">
+              Next
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Modals */}
       <AddStudentModal
@@ -245,7 +355,7 @@ const StudentModulePage: React.FC = () => {
       <StudentDetailModal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
-        student={viewingStudent}
+        student={null}
       />
     </div>
   );

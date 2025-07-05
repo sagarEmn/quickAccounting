@@ -139,9 +139,9 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
           </SheetTitle>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-6">
-          <Card>
-            <CardContent className="pt-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Card className="shadow-none border">
+            <CardContent>
               <h3 className="font-semibold mb-4">Student Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">

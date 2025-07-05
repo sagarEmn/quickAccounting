@@ -99,12 +99,6 @@ const StudentModulePage: React.FC = () => {
     }
   };
 
-  const handleViewFeeHistory = (student: Student) => {
-    // This would typically open a fee history modal or navigate to a fee details page
-    console.log("View fee history for student:", student.name);
-    alert(`Fee history for ${student.name} would be displayed here.`);
-  };
-
   const closeAddModal = () => {
     setIsAddModalOpen(false);
     setEditingStudent(null);
@@ -287,16 +281,6 @@ const StudentModulePage: React.FC = () => {
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-3">
-                      {student.hasFeeBreakdown && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-gray-600 hover:text-gray-900 p-1"
-                          onClick={() => handleViewFeeHistory(student)}
-                        >
-                          View Breakdown
-                        </Button>
-                      )}
                       <Button
                         variant="ghost"
                         size="sm"

@@ -2,8 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Plus, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StudentTable } from "@/components/student-module/StudentTable";
-import { StudentFilter } from "@/components/student-module/StudentFilter";
+import { StudentFilterTable } from "@/components/student-module/StudentFilterTable";
 import { AddStudentModal } from "@/components/student-module/AddStudentModal";
 import { DeleteStudentModal } from "@/components/student-module/DeleteStudentModal";
 import { StudentDetailModal } from "@/components/student-module/StudentDetailModal";
@@ -207,8 +206,13 @@ const StudentModulePage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Filters */}
-      <StudentFilter
+      {/* Student Filter and Table Combined */}
+      <StudentFilterTable
+        students={filteredStudents}
+        onEdit={handleEditStudent}
+        onDelete={handleDeleteStudent}
+        onViewDetails={handleViewDetails}
+        onViewFeeHistory={handleViewFeeHistory}
         onSearch={setSearchTerm}
         onClassFilter={setSelectedClass}
         onSectionFilter={setSelectedSection}
@@ -220,27 +224,7 @@ const StudentModulePage: React.FC = () => {
         selectedSection={selectedSection}
         selectedStudentType={selectedStudentType}
         selectedGender={selectedGender}
-      />
-
-      {/* Results Summary */}
-      <div className="flex items-center justify-between text-sm text-gray-600">
-        <span>
-          Showing {filteredStudents.length} of {students.length} students
-        </span>
-        {filteredStudents.length !== students.length && (
-          <span className="text-blue-600">
-            Filters applied
-          </span>
-        )}
-      </div>
-
-      {/* Student Table */}
-      <StudentTable
-        students={filteredStudents}
-        onEdit={handleEditStudent}
-        onDelete={handleDeleteStudent}
-        onViewDetails={handleViewDetails}
-        onViewFeeHistory={handleViewFeeHistory}
+        totalStudents={students.length}
       />
 
       {/* Modals */}

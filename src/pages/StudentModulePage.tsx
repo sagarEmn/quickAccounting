@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AddStudentModal } from "@/components/student-module/AddStudentModal";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { AddStudentSheet } from "@/components/student-module/AddStudentSheet";
 import { DeleteStudentModal } from "@/components/student-module/DeleteStudentModal";
 import { StudentDetailModal } from "@/components/student-module/StudentDetailModal";
 import { mockStudentData } from "@/data/mockData";
@@ -15,7 +16,7 @@ const StudentModulePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Modal states
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -70,7 +71,7 @@ const StudentModulePage: React.FC = () => {
 
   const handleEditStudent = (student: Student) => {
     setEditingStudent(student);
-    setIsAddModalOpen(true);
+    setIsAddSheetOpen(true);
   };
 
   const handleUpdateStudent = (studentData: Partial<Student>) => {
@@ -83,6 +84,7 @@ const StudentModulePage: React.FC = () => {
         )
       );
       setEditingStudent(null);
+      setIsAddSheetOpen(false);
     }
   };
 
@@ -97,11 +99,6 @@ const StudentModulePage: React.FC = () => {
       setDeletingStudent(null);
       setIsDeleteModalOpen(false);
     }
-  };
-
-  const closeAddModal = () => {
-    setIsAddModalOpen(false);
-    setEditingStudent(null);
   };
 
   const getSectionBadge = (section: string) => {
@@ -187,13 +184,20 @@ const StudentModulePage: React.FC = () => {
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-gray-900">Student Module</h1>
-            <Button 
-              onClick={() => setIsAddModalOpen(true)} 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Add Student
-            </Button>
+            <Sheet open={isAddSheetOpen} onOpenChange={setIsAddSheetOpen}>
+              <SheetTrigger asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm font-medium">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Student
+                </Button>
+              </SheetTrigger>
+              <AddStudentSheet
+                isOpen={isAddSheetOpen}
+                onOpenChange={setIsAddSheetOpen}
+                onSubmit={editingStudent ? handleUpdateStudent : handleAddStudent}
+                editingStudent={editingStudent}
+              />
+            </Sheet>
           </div>
         </div>
 
@@ -322,13 +326,6 @@ const StudentModulePage: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <AddStudentModal
-        isOpen={isAddModalOpen}
-        onClose={closeAddModal}
-        onSubmit={editingStudent ? handleUpdateStudent : handleAddStudent}
-        editingStudent={editingStudent}
-      />
-
       <DeleteStudentModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

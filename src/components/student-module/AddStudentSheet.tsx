@@ -143,8 +143,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-semibold mb-4">Student Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label htmlFor="name">Student Name *</Label>
                   <Input
                     id="name"
@@ -156,7 +156,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="gender">Gender *</Label>
                   <Select
                     value={formData.gender || "Male"}
@@ -172,7 +172,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   </Select>
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="class">Class *</Label>
                   <Select
                     value={formData.class || ""}
@@ -193,7 +193,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   {errors.class && <p className="text-sm text-red-500 mt-1">{errors.class}</p>}
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="section">Section *</Label>
                   <Select
                     value={formData.section || ""}
@@ -214,7 +214,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   {errors.section && <p className="text-sm text-red-500 mt-1">{errors.section}</p>}
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="studentType">Student Type *</Label>
                   <Select
                     value={formData.studentType || "Day Scholar"}
@@ -231,7 +231,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   </Select>
                 </div>
 
-                <div>
+                <div className="space-y-2">
                   <Label htmlFor="monthsEnrolled">Months Enrolled (2077/78) *</Label>
                   <Input
                     id="monthsEnrolled"
@@ -247,7 +247,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                   {errors.monthsEnrolled && <p className="text-sm text-red-500 mt-1">{errors.monthsEnrolled}</p>}
                 </div>
 
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 space-y-2">
                   <Label htmlFor="annualIncome">Annual Received Income (₹) *</Label>
                   <Input
                     id="annualIncome"

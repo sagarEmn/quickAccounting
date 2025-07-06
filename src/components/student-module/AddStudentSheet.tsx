@@ -321,9 +321,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
             </CardContent>
           </Card>
 
-          {/* Add Transaction Section - Only show when editing */}
-          {editingStudent && (
-            <Card className="shadow-none border">
+          {/* Add Transaction Section */}
+          <Card className="shadow-none border">
               <CardContent>
                 <h3 className="font-semibold mb-4">Add Transaction</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -434,7 +433,6 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                 </div>
               </CardContent>
             </Card>
-          )}
 
           <SheetFooter>
             <Button type="button" variant="outline" onClick={handleClose}>

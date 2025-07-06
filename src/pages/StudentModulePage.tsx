@@ -1,10 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { Search, Filter, Plus, Edit, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { Search, Filter, Plus, Edit, Users, TrendingUp, DollarSign, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AddStudentSheet } from "@/components/student-module/AddStudentSheet";
 import { StudentDetailModal } from "@/components/student-module/StudentDetailModal";
 import { mockStudentData } from "@/data/mockData";
@@ -13,6 +20,11 @@ import type { Student } from "@/types/student";
 const StudentModulePage: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(mockStudentData);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Filter states
+  const [selectedClass, setSelectedClass] = useState<string>("all");
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [showFilters, setShowFilters] = useState(false);
   
   // Modal states
   const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
@@ -25,9 +37,14 @@ const StudentModulePage: React.FC = () => {
       const matchesSearch = 
         student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         student.id.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesSearch;
+      
+      const matchesClass = selectedClass === "all" || student.class === selectedClass;
+      
+      const matchesDate = selectedDate === "" || student.enrolledDate === selectedDate;
+      
+      return matchesSearch && matchesClass && matchesDate;
     });
-  }, [students, searchTerm]);
+  }, [students, searchTerm, selectedClass, selectedDate]);
 
   // Calculate statistics
   const stats = useMemo(() => {
@@ -84,6 +101,11 @@ const StudentModulePage: React.FC = () => {
       setEditingStudent(null);
       setIsAddSheetOpen(false);
     }
+  };
+
+  const clearFilters = () => {
+    setSelectedClass("all");
+    setSelectedDate("");
   };
 
   const getSectionBadge = (section: string) => {
@@ -200,12 +222,70 @@ const StudentModulePage: React.FC = () => {
               />
             </div>
 
-            {/* Filters Button */}
-            <Button variant="outline" className="h-10 px-4 border-gray-300">
+            {/* Filters Toggle Button */}
+            <Button 
+              variant="outline" 
+              className="h-10 px-4 border-gray-300"
+              onClick={() => setShowFilters(!showFilters)}
+            >
               <Filter className="mr-2 h-4 w-4" />
               Filters
+              {showFilters ? (
+                <ChevronUp className="ml-2 h-4 w-4" />
+              ) : (
+                <ChevronDown className="ml-2 h-4 w-4" />
+              )}
             </Button>
           </div>
+
+          {/* Filter Controls */}
+          {showFilters && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-4 flex-wrap">
+                {/* Class Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Class:</label>
+                  <Select value={selectedClass} onValueChange={setSelectedClass}>
+                    <SelectTrigger className="w-32 h-8">
+                      <SelectValue placeholder="All Classes" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Classes</SelectItem>
+                      <SelectItem value="5">Class 5</SelectItem>
+                      <SelectItem value="6">Class 6</SelectItem>
+                      <SelectItem value="7">Class 7</SelectItem>
+                      <SelectItem value="8">Class 8</SelectItem>
+                      <SelectItem value="9">Class 9</SelectItem>
+                      <SelectItem value="10">Class 10</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Date Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Enrolled Date:</label>
+                  <Input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-40 h-8"
+                  />
+                </div>
+
+                {/* Clear Filters */}
+                {(selectedClass || selectedDate) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFilters}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Table */}

@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from "react";
-import { Search, Filter, Plus, Trash2, Edit, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { Search, Filter, Plus, Edit, Users, TrendingUp, DollarSign, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { AddStudentSheet } from "@/components/student-module/AddStudentSheet";
-import { DeleteStudentModal } from "@/components/student-module/DeleteStudentModal";
 import { StudentDetailModal } from "@/components/student-module/StudentDetailModal";
 import { mockStudentData } from "@/data/mockData";
 import type { Student } from "@/types/student";
@@ -17,10 +16,8 @@ const StudentModulePage: React.FC = () => {
   
   // Modal states
   const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
 
   // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
@@ -85,19 +82,6 @@ const StudentModulePage: React.FC = () => {
       );
       setEditingStudent(null);
       setIsAddSheetOpen(false);
-    }
-  };
-
-  const handleDeleteStudent = (student: Student) => {
-    setDeletingStudent(student);
-    setIsDeleteModalOpen(true);
-  };
-
-  const confirmDeleteStudent = () => {
-    if (deletingStudent) {
-      setStudents(prev => prev.filter(student => student.id !== deletingStudent.id));
-      setDeletingStudent(null);
-      setIsDeleteModalOpen(false);
     }
   };
 
@@ -289,14 +273,6 @@ const StudentModulePage: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         className="text-gray-400 hover:text-gray-600 p-1"
-                        onClick={() => handleDeleteStudent(student)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-gray-400 hover:text-gray-600 p-1"
                         onClick={() => handleEditStudent(student)}
                       >
                         <Edit className="h-4 w-4" />
@@ -326,13 +302,6 @@ const StudentModulePage: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <DeleteStudentModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDeleteStudent}
-        student={deletingStudent}
-      />
-
       <StudentDetailModal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}

@@ -320,7 +320,7 @@ const StudentModulePage: React.FC = () => {
               {filteredStudents.map((student) => (
                 <TableRow 
                   key={student.id} 
-                  className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                  className="border-b border-gray-100 hover:bg-blue-200  cursor-pointer transition-colors duration-200"
                   onClick={() => handleEditStudent(student)}
                 >
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

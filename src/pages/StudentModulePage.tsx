@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Search, Filter, Plus, Edit, Users, TrendingUp, DollarSign, Calendar, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, Filter, Plus, Users, TrendingUp, DollarSign, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -311,9 +311,6 @@ const StudentModulePage: React.FC = () => {
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Amount received
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -348,21 +345,6 @@ const StudentModulePage: React.FC = () => {
                         <span className="text-white text-xs">!</span>
                       </span>
                       {student.annualIncome.toLocaleString()}
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-gray-400 hover:text-gray-600 p-1"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditStudent(student);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

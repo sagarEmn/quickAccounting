@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox } from "@/components/ui/combobox";
 import type { Student } from "@/types/student";
 
 interface AddStudentSheetProps {
@@ -41,10 +42,24 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
     studentType: "Day Scholar",
     monthsEnrolled: 0,
     annualIncome: 0,
+    enrolledDate: "",
     hasFeeBreakdown: false,
   });
 
+  const [transactionData, setTransactionData] = useState({
+    option: "",
+    amount: "",
+    datePaid: "",
+    paymentMethod: "",
+  });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const transactionOptions = [
+    { value: "option1", label: "Option 1" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+  ];
 
   // Update form data when editing student changes
   useEffect(() => {
@@ -57,6 +72,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
         studentType: editingStudent.studentType || "Day Scholar",
         monthsEnrolled: editingStudent.monthsEnrolled || 0,
         annualIncome: editingStudent.annualIncome || 0,
+        enrolledDate: editingStudent.enrolledDate || "",
         hasFeeBreakdown: editingStudent.hasFeeBreakdown || false,
       });
     } else {
@@ -68,9 +84,17 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
         studentType: "Day Scholar",
         monthsEnrolled: 0,
         annualIncome: 0,
+        enrolledDate: "",
         hasFeeBreakdown: false,
       });
     }
+    // Reset transaction data when opening/closing or changing student
+    setTransactionData({
+      option: "",
+      amount: "",
+      datePaid: "",
+      paymentMethod: "",
+    });
     setErrors({});
   }, [editingStudent, isOpen]);
 
@@ -79,6 +103,10 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
+  };
+
+  const handleTransactionChange = (field: string, value: string) => {
+    setTransactionData(prev => ({ ...prev, [field]: value }));
   };
 
   const validateForm = () => {
@@ -121,7 +149,14 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
       studentType: "Day Scholar",
       monthsEnrolled: 0,
       annualIncome: 0,
+      enrolledDate: "",
       hasFeeBreakdown: false,
+    });
+    setTransactionData({
+      option: "",
+      amount: "",
+      datePaid: "",
+      paymentMethod: "",
     });
     setErrors({});
     onOpenChange(false);
@@ -263,6 +298,89 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
               </div>
             </CardContent>
           </Card>
+
+          {/* Add Transaction Section - Only show when editing */}
+          {editingStudent && (
+            <Card className="shadow-none border">
+              <CardContent>
+                <h3 className="font-semibold mb-4">Add Transaction</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label>Combobox</Label>
+                    <Combobox
+                      options={transactionOptions}
+                      value={transactionData.option}
+                      onValueChange={(value) => handleTransactionChange("option", value)}
+                      placeholder="Select transaction type"
+                      searchPlaceholder="Search transaction types..."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="amount">Amount</Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      min="0"
+                      value={transactionData.amount}
+                      onChange={(e) => handleTransactionChange("amount", e.target.value)}
+                      placeholder="Enter amount"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="datePaid">Date Paid</Label>
+                    <Input
+                      id="datePaid"
+                      type="date"
+                      value={transactionData.datePaid}
+                      onChange={(e) => handleTransactionChange("datePaid", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="paymentMethod">Payment Method</Label>
+                    <Select
+                      value={transactionData.paymentMethod}
+                      onValueChange={(value) => handleTransactionChange("paymentMethod", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select payment method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cash">Cash</SelectItem>
+                        <SelectItem value="card">Card</SelectItem>
+                        <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                        <SelectItem value="cheque">Cheque</SelectItem>
+                        <SelectItem value="online">Online Payment</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => {
+                      // Handle add transaction logic here
+                      console.log("Adding transaction:", transactionData);
+                      // Reset transaction form
+                      setTransactionData({
+                        option: "",
+                        amount: "",
+                        datePaid: "",
+                        paymentMethod: "",
+                      });
+                    }}
+                  >
+                    Add Transaction
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <SheetFooter>
             <Button type="button" variant="outline" onClick={handleClose}>

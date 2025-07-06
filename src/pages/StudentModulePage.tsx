@@ -61,6 +61,7 @@ const StudentModulePage: React.FC = () => {
       studentType: studentData.studentType || "Day Scholar",
       monthsEnrolled: studentData.monthsEnrolled || 0,
       annualIncome: studentData.annualIncome || 0,
+      enrolledDate: studentData.enrolledDate || new Date().toISOString().split('T')[0],
       hasFeeBreakdown: studentData.hasFeeBreakdown || false,
     };
     setStudents(prev => [...prev, newStudent]);
@@ -225,13 +226,10 @@ const StudentModulePage: React.FC = () => {
                   Section
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Student Type
+                  Enrolled Date
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  No. of months 2077/78
-                </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Annual Received Income
+                  Amount received
                 </TableHead>
                 <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -258,10 +256,11 @@ const StudentModulePage: React.FC = () => {
                     {getSectionBadge(student.section)}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {student.studentType}
-                  </TableCell>
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {student.monthsEnrolled.toFixed(2)}
+                    {new Date(student.enrolledDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
                   </TableCell>
                   <TableCell className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center text-sm text-gray-900">

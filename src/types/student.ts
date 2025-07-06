@@ -7,6 +7,7 @@ export interface Student {
   studentType: 'Day Scholar' | 'Bus' | 'Hostel';
   monthsEnrolled: number;
   annualIncome: number;
+  enrolledDate: string;
   hasFeeBreakdown?: boolean;
 }
 

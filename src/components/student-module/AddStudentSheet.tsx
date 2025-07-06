@@ -375,7 +375,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                       });
                     }}
                   >
-                    Add Transaction
+                    Save Transaction
                   </Button>
                 </div>
               </CardContent>

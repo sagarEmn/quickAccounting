@@ -240,7 +240,11 @@ const StudentModulePage: React.FC = () => {
             </TableHeader>
             <TableBody>
               {filteredStudents.map((student) => (
-                <TableRow key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <TableRow 
+                  key={student.id} 
+                  className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                  onClick={() => handleEditStudent(student)}
+                >
                   <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {student.name}
                   </TableCell>
@@ -273,7 +277,10 @@ const StudentModulePage: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         className="text-gray-400 hover:text-gray-600 p-1"
-                        onClick={() => handleEditStudent(student)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditStudent(student);
+                        }}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>

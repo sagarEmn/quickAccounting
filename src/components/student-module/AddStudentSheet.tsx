@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Plus, Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -48,9 +48,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
 
   const [transactionData, setTransactionData] = useState({
     option: "",
-    amount: "",
     datePaid: "",
-    paymentMethod: "",
+    payments: [{ amount: "", paymentMethod: "" }], // Array to support multiple payment entries
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -91,9 +90,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
     // Reset transaction data when opening/closing or changing student
     setTransactionData({
       option: "",
-      amount: "",
       datePaid: "",
-      paymentMethod: "",
+      payments: [{ amount: "", paymentMethod: "" }],
     });
     setErrors({});
   }, [editingStudent, isOpen]);
@@ -107,6 +105,31 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
 
   const handleTransactionChange = (field: string, value: string) => {
     setTransactionData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePaymentChange = (index: number, field: string, value: string) => {
+    setTransactionData(prev => ({
+      ...prev,
+      payments: prev.payments.map((payment, i) => 
+        i === index ? { ...payment, [field]: value } : payment
+      )
+    }));
+  };
+
+  const addPaymentRow = () => {
+    setTransactionData(prev => ({
+      ...prev,
+      payments: [...prev.payments, { amount: "", paymentMethod: "" }]
+    }));
+  };
+
+  const removePaymentRow = (index: number) => {
+    if (transactionData.payments.length > 1) {
+      setTransactionData(prev => ({
+        ...prev,
+        payments: prev.payments.filter((_, i) => i !== index)
+      }));
+    }
   };
 
   const validateForm = () => {
@@ -154,9 +177,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
     });
     setTransactionData({
       option: "",
-      amount: "",
       datePaid: "",
-      paymentMethod: "",
+      payments: [{ amount: "", paymentMethod: "" }],
     });
     setErrors({});
     onOpenChange(false);
@@ -305,7 +327,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
               <CardContent>
                 <h3 className="font-semibold mb-4">Add Transaction</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
+                  <div className="md:col-span-2 space-y-2">
                     <Label>Combobox</Label>
                     <Combobox
                       options={transactionOptions}
@@ -316,19 +338,7 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="amount">Amount</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      min="0"
-                      value={transactionData.amount}
-                      onChange={(e) => handleTransactionChange("amount", e.target.value)}
-                      placeholder="Enter amount"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
+                  <div className="md:col-span-2 space-y-2">
                     <Label htmlFor="datePaid">Date Paid</Label>
                     <Input
                       id="datePaid"
@@ -338,23 +348,68 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="paymentMethod">Payment Method</Label>
-                    <Select
-                      value={transactionData.paymentMethod}
-                      onValueChange={(value) => handleTransactionChange("paymentMethod", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select payment method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="cash">Cash</SelectItem>
-                        <SelectItem value="card">Card</SelectItem>
-                        <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                        <SelectItem value="cheque">Cheque</SelectItem>
-                        <SelectItem value="online">Online Payment</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  {/* Payment Rows */}
+                  <div className="md:col-span-2 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label>Payment Details</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={addPaymentRow}
+                        className="flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Payment
+                      </Button>
+                    </div>
+                    
+                    {transactionData.payments.map((payment, index) => (
+                      <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg relative">
+                        {transactionData.payments.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removePaymentRow(index)}
+                            className="absolute top-2 right-2 h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        )}
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor={`amount-${index}`}>Amount</Label>
+                          <Input
+                            id={`amount-${index}`}
+                            type="number"
+                            min="0"
+                            value={payment.amount}
+                            onChange={(e) => handlePaymentChange(index, "amount", e.target.value)}
+                            placeholder="Enter amount"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor={`paymentMethod-${index}`}>Payment Method</Label>
+                          <Select
+                            value={payment.paymentMethod}
+                            onValueChange={(value) => handlePaymentChange(index, "paymentMethod", value)}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select payment method" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="cash">Cash</SelectItem>
+                              <SelectItem value="card">Card</SelectItem>
+                              <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                              <SelectItem value="cheque">Cheque</SelectItem>
+                              <SelectItem value="online">Online Payment</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -369,9 +424,8 @@ export const AddStudentSheet: React.FC<AddStudentSheetProps> = ({
                       // Reset transaction form
                       setTransactionData({
                         option: "",
-                        amount: "",
                         datePaid: "",
-                        paymentMethod: "",
+                        payments: [{ amount: "", paymentMethod: "" }],
                       });
                     }}
                   >

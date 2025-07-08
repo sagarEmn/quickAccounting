@@ -3,6 +3,7 @@ import React from "react";
 import { ChartsOfAccountPage } from "./pages/ChartsOfAccountPage";
 import { Routes, Route } from "react-router";
 import { JournalVoucherPage } from "./pages/JournalVoucherPage";
+import { DashboardPage } from "./pages/DashboardPage";
 
 import { Sidebar } from "./components/Sidebar";
 import { Loader } from "./components/Loader";
@@ -48,7 +49,8 @@ function App() {
         <ContentWrapper>
           <main className="flex-1 p-6 overflow-y-auto h-full">
             <Routes>
-              <Route path="/" element={<ChartsOfAccountPage />} />
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route
                 path="/charts-of-accountant"
                 element={<ChartsOfAccountPage />}

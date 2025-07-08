@@ -3,6 +3,7 @@ import type { JournalVoucher } from "@/types/journalVoucher";
 import type { PaymentVoucher } from "@/types/paymentVoucher";
 import type { TrialBalanceData } from "@/types/trialBalance";
 import type { Student } from "@/types/student";
+import type { DashboardData } from "@/types/dashboard";
 
 export const mockTableData: AccountTableData[] = [
   {
@@ -442,7 +443,7 @@ export const mockStudentData: Student[] = [
     section: "A1",
     studentType: "Day Scholar",
     monthsEnrolled: 8.5,
-    annualIncome: 27000.00,
+    annualIncome: 27000.0,
     enrolledDate: "2024-04-15",
     hasFeeBreakdown: true,
   },
@@ -454,7 +455,7 @@ export const mockStudentData: Student[] = [
     section: "B2",
     studentType: "Bus",
     monthsEnrolled: 9.0,
-    annualIncome: 32000.00,
+    annualIncome: 32000.0,
     enrolledDate: "2024-03-20",
     hasFeeBreakdown: true,
   },
@@ -466,7 +467,7 @@ export const mockStudentData: Student[] = [
     section: "D3",
     studentType: "Hostel",
     monthsEnrolled: 10.0,
-    annualIncome: 45000.00,
+    annualIncome: 45000.0,
     enrolledDate: "2024-02-10",
     hasFeeBreakdown: false,
   },
@@ -478,7 +479,7 @@ export const mockStudentData: Student[] = [
     section: "A2",
     studentType: "Day Scholar",
     monthsEnrolled: 8.0,
-    annualIncome: 28500.00,
+    annualIncome: 28500.0,
     enrolledDate: "2024-05-01",
     hasFeeBreakdown: true,
   },
@@ -490,7 +491,7 @@ export const mockStudentData: Student[] = [
     section: "B1",
     studentType: "Bus",
     monthsEnrolled: 9.5,
-    annualIncome: 35000.00,
+    annualIncome: 35000.0,
     enrolledDate: "2024-03-10",
     hasFeeBreakdown: false,
   },
@@ -502,7 +503,7 @@ export const mockStudentData: Student[] = [
     section: "C1",
     studentType: "Day Scholar",
     monthsEnrolled: 7.5,
-    annualIncome: 22000.00,
+    annualIncome: 22000.0,
     enrolledDate: "2024-06-01",
     hasFeeBreakdown: true,
   },
@@ -514,7 +515,7 @@ export const mockStudentData: Student[] = [
     section: "A1",
     studentType: "Hostel",
     monthsEnrolled: 10.0,
-    annualIncome: 48000.00,
+    annualIncome: 48000.0,
     enrolledDate: "2024-02-05",
     hasFeeBreakdown: false,
   },
@@ -526,7 +527,7 @@ export const mockStudentData: Student[] = [
     section: "D3",
     studentType: "Bus",
     monthsEnrolled: 8.5,
-    annualIncome: 29000.00,
+    annualIncome: 29000.0,
     enrolledDate: "2024-04-25",
     hasFeeBreakdown: true,
   },
@@ -538,7 +539,7 @@ export const mockStudentData: Student[] = [
     section: "B2",
     studentType: "Day Scholar",
     monthsEnrolled: 9.0,
-    annualIncome: 26500.00,
+    annualIncome: 26500.0,
     enrolledDate: "2024-03-15",
     hasFeeBreakdown: false,
   },
@@ -550,7 +551,7 @@ export const mockStudentData: Student[] = [
     section: "A2",
     studentType: "Bus",
     monthsEnrolled: 8.0,
-    annualIncome: 32000.00,
+    annualIncome: 32000.0,
     enrolledDate: "2024-05-10",
     hasFeeBreakdown: true,
   },
@@ -562,7 +563,7 @@ export const mockStudentData: Student[] = [
     section: "B1",
     studentType: "Hostel",
     monthsEnrolled: 10.0,
-    annualIncome: 52000.00,
+    annualIncome: 52000.0,
     enrolledDate: "2024-01-20",
     hasFeeBreakdown: false,
   },
@@ -574,8 +575,45 @@ export const mockStudentData: Student[] = [
     section: "C1",
     studentType: "Day Scholar",
     monthsEnrolled: 7.0,
-    annualIncome: 24000.00,
+    annualIncome: 24000.0,
     enrolledDate: "2024-06-15",
     hasFeeBreakdown: true,
   },
 ];
+
+export const dashboardMockData: DashboardData = {
+  stats: {
+    teacherAttendance: {
+      present: 18,
+      absent: 3,
+      percentage: 85,
+    },
+    cashAndBank: {
+      cash: 8000,
+      bank: 150000,
+    },
+    incomeAndExpenses: {
+      income: 10000,
+      expense: 3200,
+    },
+    profitLoss: {
+      surplus: 6800,
+      type: "surplus",
+    },
+  },
+  teacherAttendanceChart: [
+    { day: "Mon", present: 20, absent: 1 },
+    { day: "Tue", present: 22, absent: 0 },
+    { day: "Wed", present: 21, absent: 2 },
+    { day: "Thu", present: 23, absent: 0 },
+    { day: "Fri", present: 22, absent: 1 },
+    { day: "Sat", present: 20, absent: 3 },
+    { day: "Today", present: 18, absent: 3 },
+  ],
+  accountDistribution: [
+    { name: "Income", value: 10000, color: "#3B82F6" },
+    { name: "Expenses", value: 3200, color: "#EF4444" },
+    { name: "Assets", value: 158000, color: "#F59E0B" },
+    { name: "Liabilities", value: 0, color: "#10B981" },
+  ],
+};

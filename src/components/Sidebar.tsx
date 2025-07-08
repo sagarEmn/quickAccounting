@@ -60,14 +60,20 @@ export const Sidebar: React.FC = () => {
 
       {/* Scrollable Navigation */}
       <nav className={`flex-1 overflow-y-auto ${isCollapsed ? 'p-2' : 'p-4'} space-y-2`}>
-        <Button
-          variant="ghost"
-          className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
-          title={isCollapsed ? "Dashboard" : ""}
-        >
-          <LayoutDashboard className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
-          {!isCollapsed && " Dashboard"}
-        </Button>
+        <Link to="/dashboard">
+          <Button
+            variant="ghost"
+            className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} ${
+              currentPath === "/" || currentPath === "/dashboard"
+                ? "text-blue-600 bg-blue-50"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
+            title={isCollapsed ? "Dashboard" : ""}
+          >
+            <LayoutDashboard className={`h-5 w-5 ${isCollapsed ? '' : 'mr-2'}`} />
+            {!isCollapsed && " Dashboard"}
+          </Button>
+        </Link>
         <Button
           variant="ghost"
           className={`w-full ${isCollapsed ? 'justify-center' : 'justify-start'} text-gray-700 hover:bg-gray-50`}
@@ -223,13 +229,19 @@ export const Sidebar: React.FC = () => {
           </>
         ) : (
           <div className="space-y-2">
-            <Button
-              variant="ghost"
-              className="w-full justify-center text-gray-700 hover:bg-gray-50"
-              title="Dashboard"
-            >
-              <LayoutDashboard className="h-5 w-5" />
-            </Button>
+            <Link to="/dashboard">
+              <Button
+                variant="ghost"
+                className={`w-full justify-center ${
+                  currentPath === "/" || currentPath === "/dashboard"
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+                title="Dashboard"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               className="w-full justify-center text-gray-700 hover:bg-gray-50"
